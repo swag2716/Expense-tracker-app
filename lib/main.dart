@@ -28,9 +28,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final List<Transaction> _userTransactions = [
-    Transaction(id: "t1", title: "New Top", amount: 1000, date: DateTime.now()),
-    Transaction(
-        id: "t2", title: "New Course", amount: 500, date: DateTime.now()),
+    // Transaction(id: "t1", title: "New Top", amount: 1000, date: DateTime.now()),
+    // Transaction(
+    //     id: "t2", title: "New Course", amount: 500, date: DateTime.now()),
   ];
 
   List<Transaction> get _recentTransactions {
@@ -43,15 +43,21 @@ class _MyAppState extends State<MyApp> {
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime chosenDate) {
     final newTx = Transaction(
         id: DateTime.now().toString(),
         title: title,
         amount: amount,
-        date: DateTime.now());
+        date: chosenDate);
 
     setState(() {
       _userTransactions.add(newTx);
+    });
+  }
+
+  void _deleteTransaction(String id){
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
     });
   }
 
@@ -103,7 +109,7 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(
                 height: 20,
               ),
-              TransactionList(transactions: _userTransactions),
+              TransactionList(transactions: _userTransactions, deleteTx: _deleteTransaction,)
             ]),
       ),
       floatingActionButton: FloatingActionButton(
