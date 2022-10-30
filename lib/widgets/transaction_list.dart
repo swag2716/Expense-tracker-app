@@ -11,12 +11,12 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
       child: transactions.isEmpty
-          ? Center(
+          ? LayoutBuilder(builder: (ctx, constraints){
+            return Center(
               child: Column(children: [
                 Container(
-                  height: 400,
+                  height: constraints.maxHeight * 0.8,
                   child: Image.asset(
                     'asset/images/waiting.png',
                     fit: BoxFit.cover,
@@ -30,7 +30,9 @@ class TransactionList extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ]),
-            )
+            );
+          })
+          
           : ListView.builder(
               itemCount: transactions.length,
               itemBuilder: (context, index) {
@@ -70,12 +72,25 @@ class TransactionList extends StatelessWidget {
                         .format(transactions[index].date)
                         .toString()),
 
-                        trailing: IconButton(
+                        trailing: MediaQuery.of(context).size.width > 450 ? 
+                        TextButton.icon (
+                          onPressed: () {
+                            deleteTx(transactions[index].id);
+                          },
+                            icon: const Icon(Icons.delete),
+                            label: Text("Delete"),
+                            style: TextButton.styleFrom(
+                              primary: Colors.red
+                            ),
+                            
+                          // textColor: Colors.red[300],
+                        )  
+                        :IconButton(
                           onPressed: (){
                             deleteTx(transactions[index].id);
                           },
                           icon: const Icon(Icons.delete)),
-                          iconColor: Colors.red[300],
+                          iconColor: Colors.red,
                   ),
                 );
               },

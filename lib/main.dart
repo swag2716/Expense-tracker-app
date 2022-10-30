@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:personal_expenses_app/widgets/chart.dart';
 import 'package:personal_expenses_app/widgets/new_transaction.dart';
@@ -11,7 +13,7 @@ void main() {
         fontFamily: 'OpenSans',
         backgroundColor: Colors.black,
         textTheme: ThemeData.dark().textTheme.copyWith(
-              bodyText1: const TextStyle(
+                bodyText1: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
             )),
@@ -27,6 +29,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  var _showChart = false;
+
   final List<Transaction> _userTransactions = [
     // Transaction(id: "t1", title: "New Top", amount: 1000, date: DateTime.now()),
     // Transaction(
@@ -55,7 +59,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  void _deleteTransaction(String id){
+  void _deleteTransaction(String id) {
     setState(() {
       _userTransactions.removeWhere((tx) => tx.id == id);
     });
@@ -77,42 +81,85 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    final isLandscape = mediaQuery.orientation == Orientation.landscape;
+    final appBar = AppBar(
+      backgroundColor: Colors.black,
+      title: const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        child: Text("Personal Expenses"),
+      ),
+      // centerTitle: true,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: IconButton(
+              onPressed: () {
+                _startAddNewTransaction(context);
+              },
+              icon: const Icon(Icons.add)),
+        )
+      ],
+    );
+    final txList = Container(
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.7,
+                  child: TransactionList(
+                    transactions: _userTransactions,
+                    deleteTx: _deleteTransaction,
+                  ));
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          child: Text("Personal Expenses"),
-        ),
-        // centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: IconButton(
-                onPressed: () {
-                  _startAddNewTransaction(context);
-                },
-                icon: const Icon(Icons.add)),
-          )
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 20,
+              if(isLandscape) Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Show Chart "),
+                  Switch.adaptive(
+                      value: _showChart,
+                      onChanged: (val) {
+                        setState(() {
+                          _showChart = val;
+                        });
+                      })
+                ],
               ),
-              Chart(_recentTransactions),
-              const SizedBox(
-                height: 20,
+              
+              if(isLandscape) _showChart ? Container(
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.7,
+                  child: Chart(_recentTransactions)
+                  )
+              : txList
+
+              else Column(
+                children: [
+                  Container(
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.25,
+                      child: Chart(_recentTransactions)
+                      ),
+                      SizedBox(
+                        height: mediaQuery.size.height * 0.05,
+                      ),
+                      txList
+                ],
               ),
-              TransactionList(transactions: _userTransactions, deleteTx: _deleteTransaction,)
+              
             ]),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Platform.isIOS? Container() : FloatingActionButton(
         onPressed: () {
           _startAddNewTransaction(context);
         },
