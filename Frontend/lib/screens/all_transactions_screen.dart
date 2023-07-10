@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:personal_expenses_app/controllers/transaction_controller.dart';
 import '../models/transaction.dart';
 import '../widgets/chart.dart';
 import '../widgets/new_transaction.dart';
@@ -13,6 +15,14 @@ class AllTransactionsScreen extends StatefulWidget {
 }
 
 class _AllTransactionsScreen extends State<AllTransactionsScreen> {
+  final TransactionController _transactionController = Get.find<TransactionController>();
+
+  @override
+  void initState(){
+    super.initState();
+    _transactionController.getTransactions();
+  }
+
   var _showChart = false;
 
   final List<Transaction> _userTransactions = [
@@ -31,19 +41,19 @@ class _AllTransactionsScreen extends State<AllTransactionsScreen> {
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount, DateTime chosenDate) {
-    final newTx = Transaction(
-        id: DateTime.now().toString(),
-        title: title,
-        amount: amount,
-        date: chosenDate,
-        userId: "",
-        );
+  // void _addNewTransaction(String title, double amount,) {
+  //   final newTx = Transaction(
+  //       id: DateTime.now().toString(),
+  //       title: title,
+  //       amount: amount,
+  //       date: chosenDate,
+  //       userId: "",
+  //       );
 
-    setState(() {
-      _userTransactions.add(newTx);
-    });
-  }
+  //   setState(() {
+  //     _userTransactions.add(newTx);
+  //   });
+  // }
 
   void _deleteTransaction(String id) {
     setState(() {
@@ -59,7 +69,9 @@ class _AllTransactionsScreen extends State<AllTransactionsScreen> {
           return GestureDetector(
             onTap: () {},
             behavior: HitTestBehavior.opaque,
-            child: NewTransaction(addNewTransaction: _addNewTransaction),
+            child: NewTransaction(
+              addNewTransaction: _addNewTransaction
+            ),
           );
         });
   }

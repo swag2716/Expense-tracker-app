@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
+
+import '../controllers/transaction_controller.dart';
+import '../models/transaction.dart';
 
 class NewTransaction extends StatefulWidget {
-  final Function addNewTransaction;
 
-   NewTransaction({
-    super.key, required this.addNewTransaction}){
-      print('NewTransaction constructer');
-    }
+
+   NewTransaction({super.key});
 
   @override
-  State<NewTransaction> createState() {
-    print('createState');
-    return _NewTransactionState();
-    }
+  State<NewTransaction> createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
+  final TransactionController _transactionController = Get.find<TransactionController>();
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _selectedDate;
-
-  _NewTransactionState(){
-    print('constructore newTransaction state');
-  }
 
   @override
   void initState() {
@@ -46,16 +42,29 @@ class _NewTransactionState extends State<NewTransaction> {
     super.dispose();
   }
 
-  void _submitData() {
+  void _submitData() async{
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
     if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
       return;
     }
-    widget.addNewTransaction(enteredTitle, enteredAmount, _selectedDate);
+    
+    final newTransaction = Transaction(
+      id:"",
+      title: enteredTitle,
+      amount: enteredAmount,
+      transactionId: "",
+    );
 
-    Navigator.of(context).pop();
+    try {
+      await _transactionController.addTransaction(newTransaction);
+      Get.back();
+      Get.to(() => const AllTransactionsScreen());
+    } catch (e) {
+      Get.snackbar("error", "Failed to add task");
+    }
+
   }
 
   void _presentDatePicker() {

@@ -2,20 +2,16 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:personal_expenses_app/models/transaction.dart';
+import 'package:personal_expenses_app/screens/log_in_screen.dart';
+import 'package:personal_expenses_app/screens/sign_up_screen.dart';
 import '../storage/auth_storage.dart';
 
 
 
-enum TokenStatus {
-  valid,
-  accessTokenExpired,
-  refreshTokenExpired,
-  newUser
-}
 class TransactionController extends GetxController {
   RxList<Transaction> transactions = <Transaction>[].obs;
 
-  Future<TokenStatus> isUserLoggedIn() async {
+  Future<void> getTransactions() async {
   String url = "http://192.168.29.116:9000/transaction";
   final tokenManager = TokenManager();
   final accessToken = await tokenManager.getAccessToken();
@@ -28,24 +24,18 @@ class TransactionController extends GetxController {
     }
   );
 
-  if(response.statusCode == 200 || response.statusCode == 403){
+  if(response.statusCode == 200){
     final jsonData = jsonDecode(response.body) as List<dynamic>?;
     if(jsonData != null){
       transactions.assignAll(jsonData.map((data) => Transaction.fromJSON(data)).toList());
     }
   }
 
-  if(response.statusCode == 200){
-    return TokenStatus.valid;
-  }
-  else if(response.statusCode == 403){
-    return TokenStatus.accessTokenExpired;
-  }
   else if(response.statusCode == 401){
-    return TokenStatus.refreshTokenExpired;
+    Get.to(LogInScreen());
   } 
   else if(response.statusCode == 400){
-    return TokenStatus.newUser;
+    Get.to(SignUpScreen());
   }
   else{
     throw Exception("Failed to check validity");

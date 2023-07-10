@@ -30,7 +30,7 @@ func Authenticate() gin.HandlerFunc {
 			c.Set("email", refreshClaims.Email)
 			c.Set("first_name", refreshClaims.Name)
 			c.Set("uid", refreshClaims.Uid)
-			c.JSON(http.StatusForbidden, refreshClaims)
+			c.JSON(http.StatusOK, refreshClaims)
 			c.Next()
 
 		} else {

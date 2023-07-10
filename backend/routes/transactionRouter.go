@@ -9,7 +9,7 @@ import (
 func TransactionRoutes(incomingRoutes *gin.Engine) {
 	incomingRoutes.Use(middleware.Authenticate())
 
-	incomingRoutes.GET("/transaction", transactionControllers.GetTransactions())
+	incomingRoutes.GET("/transaction", middleware.Authenticate(), transactionControllers.GetTransactions())
 	incomingRoutes.POST("/transaction", transactionControllers.AddTransaction())
 	incomingRoutes.PATCH("/transaction/:transaction_id", transactionControllers.EditTransaction())
 	incomingRoutes.DELETE("/transaction/:transaction_id", transactionControllers.DeleteTransaction())
