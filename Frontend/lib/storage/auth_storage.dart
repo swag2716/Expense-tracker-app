@@ -26,12 +26,11 @@ class TokenManager {
     await preferences.remove(_refreshTokenKey);
   }
 
-  Future<void> saveUserDetails(String name, String email, String phoneNumber, String userId) async {
+  Future<void> saveUserDetails(String name, String email, String phoneNumber) async {
     final preferences = await SharedPreferences.getInstance();
     await preferences.setString('name', name);
     await preferences.setString('email', email);
     await preferences.setString('phone_number', phoneNumber);
-    await preferences.setString('user_id', userId);
   }
 
   Future<String?> getName() async {
@@ -48,8 +47,5 @@ class TokenManager {
     final preferences = await SharedPreferences.getInstance();
     return preferences.getString('phone_number');
   }
-  Future<String?> getuserId() async {
-    final preferences = await SharedPreferences.getInstance();
-    return preferences.getString('user_id');
-  }
+  
 }

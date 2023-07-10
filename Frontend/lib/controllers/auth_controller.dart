@@ -29,10 +29,9 @@ class AuthController extends GetxController{
         final name = createdUser.name;
         final email = createdUser.email;
         final phoneNumber = createdUser.phoneNumber;
-        final userId = createdUser.userId;
 
         await tokenManager.saveTokens(accessToken, refreshToken);
-        await tokenManager.saveUserDetails(name, email, phoneNumber, userId);
+        await tokenManager.saveUserDetails(name, email, phoneNumber);
 
         users.add(createdUser);
       } else{
@@ -63,10 +62,9 @@ class AuthController extends GetxController{
         final name = currentUser.name;
         final email = currentUser.email;
         final phoneNumber = currentUser.phoneNumber;
-        final userId = currentUser.userId;
 
         await tokenManager.saveTokens(accessToken, refreshToken);
-        await tokenManager.saveUserDetails(name, email, phoneNumber, userId);
+        await tokenManager.saveUserDetails(name, email, phoneNumber);
 
         final index = users.indexWhere((u) => u.id == user.id);
         if (index != -1) {
@@ -81,6 +79,6 @@ class AuthController extends GetxController{
   }
 
   Future<void> updateToken() async{
-    
+
   }
 }

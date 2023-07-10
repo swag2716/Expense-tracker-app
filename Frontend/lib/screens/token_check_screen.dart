@@ -4,13 +4,16 @@ import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
 import 'package:personal_expenses_app/screens/log_in_screen.dart';
 import 'package:personal_expenses_app/screens/sign_up_screen.dart';
 
+import '../controllers/transaction_controller.dart';
+
 class TokenCheckScreen extends StatelessWidget{
   const TokenCheckScreen({super.key});
 
   @override
   Widget build(BuildContext context){
+    final TransactionController transactionController = TransactionController();
     return FutureBuilder<TokenStatus>(
-      future: isUserLoggedIn(),
+      future: transactionController.isUserLoggedIn(),
       builder: (context, snapshot){
         if(snapshot.connectionState == ConnectionState.waiting){
           return const CircularProgressIndicator();
