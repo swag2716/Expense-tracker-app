@@ -16,10 +16,9 @@ import (
 )
 
 type SignedDetails struct {
-	Email     string
-	Name      string
-	User_type string
-	Uid       string
+	Email string
+	Name  string
+	Uid   string
 	jwt.StandardClaims
 }
 
@@ -77,7 +76,7 @@ func UpdateAllTokens(signedToken string, signedRefreshToken string, uid string) 
 
 	updateObj = append(updateObj, bson.E{Key: "updated_at", Value: Updated_At})
 
-	upsert := true
+	upsert := false
 
 	filter := bson.M{"user_id": uid}
 
@@ -116,14 +115,14 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 	claims, ok := token.Claims.(*SignedDetails)
 
 	if !ok {
-		msg = fmt.Sprintf("the token is invalid")
-		msg = err.Error()
+		msg = "invalid"
+		fmt.Sprintln(msg)
 		return
 	}
 
 	if claims.ExpiresAt < time.Now().Local().Unix() {
-		msg = fmt.Sprintf("token is expired")
-		msg = err.Error()
+		msg = "expired"
+		fmt.Sprintln(msg)
 		return
 	}
 

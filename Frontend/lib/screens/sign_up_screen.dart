@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:personal_expenses_app/controllers/auth_controller.dart';
+import 'package:personal_expenses_app/models/auth_model.dart';
+import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
 import '../widgets/textfield_widget.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final AuthController _authController = Get.find<AuthController>();
+  SignUpScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController phoneController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -20,33 +29,48 @@ class SignUpScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 RichText(
-                text: TextSpan(
-                  text: 'Hello, \nWelcome To',
-                  style: Theme.of(context).textTheme.displayLarge,
-                  children: const <TextSpan>[
-                    TextSpan(text: '\nPersonal Expenses', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green)),
-                  ],
+                  text: TextSpan(
+                    text: 'Hello, \nWelcome To',
+                    style: Theme.of(context).textTheme.displayLarge,
+                    children: const <TextSpan>[
+                      TextSpan(
+                          text: '\nPersonal Expenses',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green)),
+                    ],
+                  ),
                 ),
-              ),
-                const Column(
+                Column(
                   children: [
+                    TextFieldWidget(
+                      hintText: "Name",
+                      controller: nameController,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    TextFieldWidget(
+                      hintText: "Email",
+                      controller: emailController,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    TextFieldWidget(
+                      hintText: "Phone number",
+                      controller: phoneController,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    TextFieldWidget(
+                      hintText: "Password",
+                      controller: passwordController,
+                    ),
                     // SizedBox(
-                    //   height: 20,
+                    //   height: 24,
                     // ),
-                    TextFieldWidget(hintText: "Email"),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    TextFieldWidget(hintText: "Phone number"),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    TextFieldWidget(hintText: "Password"),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    TextFieldWidget(hintText: "Confirm Password"),
-                    
                   ],
                 ),
                 Column(
@@ -72,7 +96,33 @@ class SignUpScreen extends StatelessWidget {
                             ),
                             backgroundColor: Colors.transparent,
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            AuthModel user = AuthModel(
+                                id: "",
+                                name: nameController.text,
+                                email: emailController.text,
+                                phoneNumber: phoneController.text,
+                                password:passwordController.text,
+                                token: "",
+                                refreshToken: "",
+                                userId: ""
+                              );
+
+                            try {
+                              await _authController.signUp(user);
+                              // Get.back();
+
+                              Get.to(
+                                () => const AllTransactionsScreen(),
+                                transition: Transition.fade,
+                                duration: const Duration(seconds: 1),
+                              );
+                            } catch (e) {
+                              print("Failed to signup: $e");
+
+                              Get.snackbar("error", "Failed to signup");
+                            }
+                          },
                           child: Center(
                               child: Text(
                             "Sign Up",

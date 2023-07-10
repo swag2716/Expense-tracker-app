@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"time"
 
@@ -15,10 +16,11 @@ func Login() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		var user models.User
-		var foundUser models.User
+		var user models.LogInUser
+		var foundUser models.SignUpUser
 
 		if err := c.BindJSON(&user); err != nil {
+			log.Fatal(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -26,6 +28,7 @@ func Login() gin.HandlerFunc {
 		err := userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
 
 		if err != nil {
+			log.Fatal(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "email is incorrect"})
 		}
 
@@ -36,10 +39,11 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
-		if foundUser.Email == nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "user not found"})
-			// return
-		}
+		// if foundUser.Email == nil {
+		// 	c.JSON(http.StatusInternalServerError, gin.H{"error": "user not found"})
+		// 	return
+		// }
+
 		token, refreshToken, _ := helpers.GenerateAllTokens(*foundUser.Email, *foundUser.Name, foundUser.User_id)
 		helpers.UpdateAllTokens(token, refreshToken, foundUser.User_id)
 

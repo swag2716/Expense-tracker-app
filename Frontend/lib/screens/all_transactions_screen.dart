@@ -36,7 +36,9 @@ class _AllTransactionsScreen extends State<AllTransactionsScreen> {
         id: DateTime.now().toString(),
         title: title,
         amount: amount,
-        date: chosenDate);
+        date: chosenDate,
+        userId: "",
+        );
 
     setState(() {
       _userTransactions.add(newTx);

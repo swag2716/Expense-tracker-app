@@ -6,8 +6,6 @@ class AuthModel{
   final String password;
   final String token;
   final String refreshToken;
-  final String createdAt;
-  final String updatedAt;
   final String userId;
 
   AuthModel({
@@ -18,8 +16,6 @@ class AuthModel{
     required this.password,
     required this.token,
     required this.refreshToken,
-    required this.createdAt,
-    required this.updatedAt,
     required this.userId,
   });
 
@@ -29,11 +25,9 @@ class AuthModel{
       name: json['name'], 
       email: json['email'], 
       phoneNumber: json['phone'], 
-      password: json['password'], 
+      password: '', 
       token: json['token'], 
-      refreshToken: json['refresh_oken'], 
-      createdAt:json['created_at'], 
-      updatedAt: json['updated_at'], 
+      refreshToken: json['refresh_token'], 
       userId: json['user_id']
     );
   }
@@ -47,8 +41,6 @@ class AuthModel{
       'password':password,
       'token':token,
       'refresh_token':refreshToken,
-      'created_at':createdAt,
-      'updated_at':updatedAt,
       'user_id':userId,
     };
   }

@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:personal_expenses_app/controllers/auth_controller.dart';
+import 'package:personal_expenses_app/models/auth_model.dart';
 
 import '../widgets/textfield_widget.dart';
+import 'all_transactions_screen.dart';
 
 class LogInScreen extends StatelessWidget {
-  const LogInScreen({Key? key}) : super(key: key);
+  final AuthController _authController = Get.find<AuthController>();
+  LogInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
     final Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -28,11 +35,11 @@ class LogInScreen extends StatelessWidget {
                     const SizedBox(
                       height: 40,
                     ),
-                    const TextFieldWidget(hintText: "Email"),
+                    TextFieldWidget(hintText: "Email", controller: emailController,),
                     const SizedBox(
                       height: 24,
                     ),
-                    const TextFieldWidget(hintText: "Password"),
+                    TextFieldWidget(hintText: "Password", controller: passwordController,),
                     const SizedBox(
                       height: 24,
                     ),
@@ -63,7 +70,32 @@ class LogInScreen extends StatelessWidget {
                             ),
                             backgroundColor: Colors.transparent,
                           ),
-                          onPressed: () {},
+                          onPressed: () async{
+                            AuthModel user = AuthModel(
+                              id: "", 
+                              name: "", 
+                              email: emailController.text, 
+                              phoneNumber: "", 
+                              password: passwordController.text,
+                              token: "", 
+                              refreshToken: "", 
+                              userId: ""
+                            );
+
+                            try{
+                              await _authController.logIn(user);
+                              // Get.back();
+
+                              Get.to(
+                                () => const AllTransactionsScreen(),
+                                transition: Transition.fade,
+                                duration: const Duration(seconds: 1),
+                              );
+                            } catch(e){
+                              print(e);
+                              Get.snackbar("error", "Log in failed");
+                            }
+                          },
                           child: Center(
                               child: Text(
                             "Login",

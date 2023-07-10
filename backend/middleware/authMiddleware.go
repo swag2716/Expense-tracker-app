@@ -11,23 +11,36 @@ import (
 func Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		clientToken := c.Request.Header.Get("token")
-		if clientToken == "" {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("No authorization header provided")})
+		refreshToken := c.Request.Header.Get("refresh-token")
+		if clientToken == "" || refreshToken == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintln("No authorization header provided")})
 			c.Abort()
 			return
 		}
 
 		claims, err := helpers.ValidateToken(clientToken)
-
 		if err != "" {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err})
-			c.Abort()
-			return
+			refreshClaims, err := helpers.ValidateToken(refreshToken)
+			if err != "" {
+				c.JSON(http.StatusUnauthorized, gin.H{"error": err})
+				c.Abort()
+				return
+			}
+			helpers.UpdateAllTokens(clientToken, refreshToken, refreshClaims.Uid)
+			c.Set("email", refreshClaims.Email)
+			c.Set("first_name", refreshClaims.Name)
+			c.Set("uid", refreshClaims.Uid)
+			c.JSON(http.StatusForbidden, refreshClaims)
+			c.Next()
+
+		} else {
+			c.Set("email", claims.Email)
+			c.Set("first_name", claims.Name)
+			c.Set("uid", claims.Uid)
+
+			c.JSON(http.StatusOK, claims)
+			c.Next()
 		}
 
-		c.Set("email", claims.Email)
-		c.Set("first_name", claims.Name)
-		c.Set("uid", claims.Uid)
-		c.Next()
 	}
 }

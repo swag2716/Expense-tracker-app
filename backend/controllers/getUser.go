@@ -20,7 +20,7 @@ func GetUser() gin.HandlerFunc {
 		defer cancel()
 
 		// find the document with the specified user_id
-		var user models.User
+		var user models.SignUpUser
 		err := userCollection.FindOne(ctx, bson.M{"user_id": userId}).Decode(&user)
 
 		if err != nil {
