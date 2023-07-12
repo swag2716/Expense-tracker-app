@@ -3,50 +3,30 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
 
+import '../controllers/auth_controller.dart';
 import '../controllers/transaction_controller.dart';
 import '../models/transaction.dart';
 
 class NewTransaction extends StatefulWidget {
 
-
-   NewTransaction({super.key});
+  const NewTransaction({super.key});
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final TransactionController _transactionController = Get.find<TransactionController>();
+  final _transactionController = Get.find<TransactionController>();
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-  DateTime? _selectedDate;
+  DateTime _selectedDate = DateTime.now();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    print('initState');
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(NewTransaction oldWidget) {
-    // TODO: implement didUpdateWidget
-    print('didUpdateWidget');
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    print('dispose');
-    super.dispose();
-  }
 
   void _submitData() async{
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
+    if (enteredTitle.isEmpty || enteredAmount <= 0) {
       return;
     }
     
@@ -55,14 +35,16 @@ class _NewTransactionState extends State<NewTransaction> {
       title: enteredTitle,
       amount: enteredAmount,
       transactionId: "",
+      date: _selectedDate,
     );
 
     try {
       await _transactionController.addTransaction(newTransaction);
       Get.back();
-      Get.to(() => const AllTransactionsScreen());
+      // Get.to(() => const AllTransactionsScreen());
     } catch (e) {
-      Get.snackbar("error", "Failed to add task");
+      print(e);
+      Get.snackbar("error", "Failed to add transaction");
     }
 
   }
@@ -129,7 +111,9 @@ class _NewTransactionState extends State<NewTransaction> {
                   ),
                 ),
               ),
-              onSubmitted: (_) => _submitData,
+              onSubmitted: (_) {
+                _submitData();
+              },
             ),
             const SizedBox(
               height: 20,

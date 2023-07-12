@@ -25,20 +25,18 @@ func Authenticate() gin.HandlerFunc {
 				c.JSON(http.StatusUnauthorized, gin.H{"error": err})
 				c.Abort()
 				return
+			} else {
+				helpers.UpdateAllTokens(clientToken, refreshToken, refreshClaims.Uid)
+				c.Set("email", refreshClaims.Email)
+				c.Set("name", refreshClaims.Name)
+				c.Set("uid", refreshClaims.Uid)
+				c.Next()
 			}
-			helpers.UpdateAllTokens(clientToken, refreshToken, refreshClaims.Uid)
-			c.Set("email", refreshClaims.Email)
-			c.Set("first_name", refreshClaims.Name)
-			c.Set("uid", refreshClaims.Uid)
-			c.JSON(http.StatusOK, refreshClaims)
-			c.Next()
 
 		} else {
 			c.Set("email", claims.Email)
-			c.Set("first_name", claims.Name)
+			c.Set("name", claims.Name)
 			c.Set("uid", claims.Uid)
-
-			c.JSON(http.StatusOK, claims)
 			c.Next()
 		}
 

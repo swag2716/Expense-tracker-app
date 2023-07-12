@@ -14,12 +14,13 @@ class TransactionController extends GetxController {
   Future<void> getTransactions() async {
   String url = "http://192.168.29.116:9000/transaction";
   final tokenManager = TokenManager();
+  // await tokenManager.clearTokens();
   final accessToken = await tokenManager.getAccessToken();
   final refreshToken = await tokenManager.getRefreshToken();
   final response = await http.get(
     Uri.parse(url), 
     headers: {
-      'token': 'Bearer $accessToken',
+      'token': '$accessToken',
       'refresh-token': '$refreshToken',
     }
   );
@@ -32,10 +33,13 @@ class TransactionController extends GetxController {
   }
 
   else if(response.statusCode == 401){
-    Get.to(LogInScreen());
+    Get.back();
+    Get.offAll(LogInScreen());
+    
   } 
   else if(response.statusCode == 400){
-    Get.to(SignUpScreen());
+    Get.back();    
+    Get.offAll(SignUpScreen());
   }
   else{
     throw Exception("Failed to check validity");
@@ -69,32 +73,35 @@ class TransactionController extends GetxController {
   Future<void> deleteTransaction(String transactionId) async {
     try {
       final response = await http
-          .delete(Uri.parse('http://192.168.29.116:8000/task/$transactionId'));
+          .delete(Uri.parse('http://192.168.29.116:9000/transaction/$transactionId'));
       if (response.statusCode == 200) {
         transactions.removeWhere((t) => t.id == transactionId);
       } else {
-        throw Exception('Failed to delete task');
+        throw Exception('Failed to delete transaction');
       }
     } catch (e) {
-      throw Exception('Failed to delete task: $e');
+      throw Exception('Failed to delete transaction: $e');
     }
   }
 
   Future<void> addTransaction(Transaction transaction) async {
-    try {
+    final tokenManager = TokenManager();
+    final accessToken = await tokenManager.getAccessToken();
+    final refreshToken = await tokenManager.getRefreshToken();
       final response = await http.post(
         Uri.parse('http://192.168.29.116:9000/transaction'),
         body: jsonEncode(transaction.toJSON()),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'token': '$accessToken',
+          'refresh-token': '$refreshToken',
+          },
       );
       if (response.statusCode == 200) {
-        final createdTask = Transaction.fromJSON(jsonDecode(response.body));
-        transactions.add(createdTask);
+        final createdTransaction = Transaction.fromJSON(jsonDecode(response.body));
+        transactions.add(createdTransaction);
       } else {
-        throw Exception('Failed to create task');
+        throw Exception('Failed to create transaction');
       }
-    } catch (e) {
-      throw Exception('Failed to create task: $e');
-    }
-  }
+    } 
 }

@@ -14,7 +14,7 @@ func GetTransactions() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		userId, exists := c.Get("Uid")
+		userId, exists := c.Get("uid")
 		if !exists {
 			c.JSON(http.StatusBadRequest, gin.H{"error": exists})
 			return

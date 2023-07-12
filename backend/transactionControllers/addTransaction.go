@@ -15,6 +15,16 @@ func AddTransaction() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
+		// println(c.)
+		userId, exists := c.Get("uid")
+		if !exists {
+			println(c)
+			println(exists)
+			println("Here")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "User id not found"})
+			return
+
+		}
 
 		var transaction models.Transaction
 
@@ -35,7 +45,8 @@ func AddTransaction() gin.HandlerFunc {
 		transaction.ID = primitive.NewObjectID()
 		transaction.Transaction_id = transaction.ID.Hex()
 
-		transaction.Date = time.Now()
+		// transaction.Date = time.Now()
+		transaction.User_id = userId.(string)
 
 		_, insertErr := transactionCollection.InsertOne(ctx, transaction)
 

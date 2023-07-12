@@ -39,7 +39,10 @@ class LogInScreen extends StatelessWidget {
                     const SizedBox(
                       height: 24,
                     ),
-                    TextFieldWidget(hintText: "Password", controller: passwordController,),
+                    TextFieldWidget(
+                      obscureText: true,
+                      hintText: "Password", 
+                      controller: passwordController,),
                     const SizedBox(
                       height: 24,
                     ),
@@ -84,15 +87,13 @@ class LogInScreen extends StatelessWidget {
 
                             try{
                               await _authController.logIn(user);
-                              // Get.back();
 
-                              Get.to(
+                              Get.offAll(
                                 () => const AllTransactionsScreen(),
                                 transition: Transition.fade,
                                 duration: const Duration(seconds: 1),
                               );
                             } catch(e){
-                              print(e);
                               Get.snackbar("error", "Log in failed");
                             }
                           },

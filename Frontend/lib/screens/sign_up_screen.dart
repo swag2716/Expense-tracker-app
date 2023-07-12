@@ -65,12 +65,10 @@ class SignUpScreen extends StatelessWidget {
                       height: 24,
                     ),
                     TextFieldWidget(
+                      obscureText: true,
                       hintText: "Password",
                       controller: passwordController,
                     ),
-                    // SizedBox(
-                    //   height: 24,
-                    // ),
                   ],
                 ),
                 Column(
@@ -110,16 +108,13 @@ class SignUpScreen extends StatelessWidget {
 
                             try {
                               await _authController.signUp(user);
-                              // Get.back();
 
-                              Get.to(
+                              Get.offAll(
                                 () => const AllTransactionsScreen(),
                                 transition: Transition.fade,
                                 duration: const Duration(seconds: 1),
                               );
                             } catch (e) {
-                              print("Failed to signup: $e");
-
                               Get.snackbar("error", "Failed to signup");
                             }
                           },

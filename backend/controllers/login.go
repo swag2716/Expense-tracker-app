@@ -53,6 +53,8 @@ func Login() gin.HandlerFunc {
 			return
 		}
 
+		foundUser.Password = nil
+
 		c.JSON(http.StatusOK, foundUser)
 	}
 }

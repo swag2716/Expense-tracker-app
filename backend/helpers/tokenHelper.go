@@ -113,6 +113,7 @@ func ValidateToken(signedToken string) (claims *SignedDetails, msg string) {
 	}
 
 	claims, ok := token.Claims.(*SignedDetails)
+	println(claims.Uid)
 
 	if !ok {
 		msg = "invalid"

@@ -22,8 +22,8 @@ class TokenManager {
 
   Future<void> clearTokens() async {
     final preferences = await SharedPreferences.getInstance();
-    await preferences.remove(_accessTokenKey);
-    await preferences.remove(_refreshTokenKey);
+    await preferences.setString(_accessTokenKey, "");
+    await preferences.setString(_refreshTokenKey, "");
   }
 
   Future<void> saveUserDetails(String name, String email, String phoneNumber) async {

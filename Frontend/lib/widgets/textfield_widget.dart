@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class TextFieldWidget extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
+  final bool obscureText;
   const TextFieldWidget({
     required this.hintText,
     required this.controller,
+    this.obscureText = false,
     super.key,
   });
 
@@ -18,6 +20,7 @@ class TextFieldWidget extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: TextField(
+          obscureText: obscureText,
           cursorColor: Colors.green,
           controller: controller,
           decoration: InputDecoration(

@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:personal_expenses_app/controllers/transaction_controller.dart';
+
+import '../models/transaction.dart';
 
 class TransactionItem extends StatelessWidget {
-  final deleteTx;
-  final transaction;
+    final TransactionController _transactionController = Get.find<TransactionController>();
 
-  const TransactionItem({super.key, required this.deleteTx, required this.transaction});
+  final Transaction transactionItem;
+
+  TransactionItem({super.key, required this.transactionItem});
+
+  void deleteTx(transactionId) async{
+    try{
+      await _transactionController.deleteTransaction(transactionId);
+    } catch(e){
+      print(e);
+      Get.snackbar("error","Failed to delete transaction");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +45,24 @@ class TransactionItem extends StatelessWidget {
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            '\$${transaction.amount.toString()}',
+                            '\$${transactionItem.amount.toString()}',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         )),
                       ),
                     ),
                     title: Text(
-                      transaction.title,
+                      transactionItem.title,
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(DateFormat.yMMMd()
-                        .format(transaction.date)
+                        .format(transactionItem.date)
                         .toString()),
 
                         trailing: MediaQuery.of(context).size.width > 450 ? 
                         TextButton.icon (
-                          onPressed: () {
-                            deleteTx(transaction.id);
+                          onPressed: (){
+                            deleteTx(transactionItem.id);
                           },
                             icon: const Icon(Icons.delete),
                             label: const Text("Delete"),
@@ -61,11 +75,14 @@ class TransactionItem extends StatelessWidget {
                         )  
                         :IconButton(
                           onPressed: (){
-                            deleteTx(transaction.id);
+                            deleteTx(transactionItem.id);
                           },
                           icon: const Icon(Icons.delete)),
                           iconColor: Colors.red,
                   ),
                 );
+
+
+                
   }
 }

@@ -26,6 +26,7 @@ func main() {
 	router.Use(gin.Logger())
 
 	routes.AuthRoutes(router)
+	routes.TransactionRoutes(router)
 	routes.UserRoutes(router)
 
 	log.Fatal(router.Run(":" + port))

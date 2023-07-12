@@ -66,19 +66,15 @@ class AuthController extends GetxController{
         await tokenManager.saveTokens(accessToken, refreshToken);
         await tokenManager.saveUserDetails(name, email, phoneNumber);
 
-        final index = users.indexWhere((u) => u.id == user.id);
-        if (index != -1) {
-          users[index] = user;
-        }
+        // final index = users.indexWhere((u) => u.id == user.id);
+        // if (index != -1) {
+        //   users[index] = user;
+        // }
       } else{
         throw Exception('Failed to login user');
       }
     } catch(e){
       throw Exception('Failed to login user: $e');
     }
-  }
-
-  Future<void> updateToken() async{
-
   }
 }

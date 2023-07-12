@@ -34,7 +34,7 @@ func EditTransaction() gin.HandlerFunc {
 		updateObj = append(updateObj, bson.E{Key: "transaction_title", Value: transaction.Transaction_title})
 		updateObj = append(updateObj, bson.E{Key: "transaction_amount", Value: transaction.Transaction_amount})
 
-		transaction.Date = time.Now()
+		// transaction.Date = time.Now()
 		updateObj = append(updateObj, bson.E{Key: "date", Value: transaction.Date})
 
 		upsert := false
@@ -53,7 +53,7 @@ func EditTransaction() gin.HandlerFunc {
 			&opt,
 		)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			// c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
