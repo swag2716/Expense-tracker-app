@@ -19,7 +19,7 @@ gin/gonic framework for backend.
 3. Install MongoDB: [MongoDB Installation Guide](https://www.mongodb.com/docs/manual/installation/)
 4. Clone the repository:
    ```bash
-   git clone https://github.com/swag2716/personal_expenses_app.git
+   git clone https://github.com/swag2716/Expense-tracker-app.git
 5. Navigate to the project directory:
     ```bash
     cd Expense-tracker-app
