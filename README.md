@@ -3,8 +3,11 @@
 
 • A full-stack expense management application using Flutter for frontend and Golang with the
 gin/gonic framework for backend.
+
 • Integrated JWT authentication to provide secure user registration and login functionality.
+
 • Utilized the shared preferences package in Flutter to implement local storage
+
 • Integrated MongoDB as the backend database to store and manage expense data on the server side.
 
 
