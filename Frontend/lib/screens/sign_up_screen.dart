@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:personal_expenses_app/controllers/auth_controller.dart';
 import 'package:personal_expenses_app/models/auth_model.dart';
 import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
+import 'package:personal_expenses_app/screens/log_in_screen.dart';
 import '../widgets/textfield_widget.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -22,7 +23,7 @@ class SignUpScreen extends StatelessWidget {
           width: size.width,
           height: size.height,
           padding:
-              const EdgeInsets.only(left: 20, right: 20, top: 150, bottom: 100),
+              const EdgeInsets.only(left: 20, right: 20, top: 100, bottom: 100),
           color: Colors.black,
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,6 +127,34 @@ class SignUpScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                    children: 
+                    [
+                      Text('Already have an account?', style: Theme.of(context).textTheme.displaySmall),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Get.to(LogInScreen());
+                        },
+                        child: const Text(
+                          'Log In',
+                           style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.green,
+                           ),
+                        ),
+                      )
+                    ]
+                    ),
+                    
+                    
+                    
                   ],
                 )
               ]),

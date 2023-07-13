@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -13,7 +12,7 @@ func Authenticate() gin.HandlerFunc {
 		clientToken := c.Request.Header.Get("token")
 		refreshToken := c.Request.Header.Get("refresh-token")
 		if clientToken == "" || refreshToken == "" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintln("No authorization header provided")})
+			c.JSON(http.StatusBadRequest, gin.H{"error": "No authorization header provided"})
 			c.Abort()
 			return
 		}

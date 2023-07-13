@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"time"
 
@@ -20,7 +19,6 @@ func Login() gin.HandlerFunc {
 		var foundUser models.SignUpUser
 
 		if err := c.BindJSON(&user); err != nil {
-			log.Fatal(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -28,7 +26,6 @@ func Login() gin.HandlerFunc {
 		err := userCollection.FindOne(ctx, bson.M{"email": user.Email}).Decode(&foundUser)
 
 		if err != nil {
-			log.Fatal(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "email is incorrect"})
 		}
 

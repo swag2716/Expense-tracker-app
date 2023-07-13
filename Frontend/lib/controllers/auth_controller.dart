@@ -19,8 +19,9 @@ class AuthController extends GetxController{
         headers: {'Content-Type':'application/json'},
       );
 
+      final jsonData = jsonDecode(response.body);
       if(response.statusCode == 200) {
-        final createdUser = AuthModel.fromJSON(jsonDecode(response.body));
+        final createdUser = AuthModel.fromJSON(jsonData);
 
         final tokenManager = TokenManager();
         final accessToken = createdUser.token;
@@ -35,6 +36,7 @@ class AuthController extends GetxController{
 
         users.add(createdUser);
       } else{
+        Get.snackbar("error", jsonData['error']);
         throw Exception('Failed to create user');
       }
     } catch(e){
@@ -52,8 +54,9 @@ class AuthController extends GetxController{
         headers: {'Content-Type':'application/json'},
       );
 
+      final jsonData = jsonDecode(response.body);
       if(response.statusCode == 200) {
-        final currentUser = AuthModel.fromJSON(jsonDecode(response.body));
+        final currentUser = AuthModel.fromJSON(jsonData);
 
         final tokenManager = TokenManager();
         final accessToken = currentUser.token;
@@ -71,6 +74,7 @@ class AuthController extends GetxController{
         //   users[index] = user;
         // }
       } else{
+        Get.snackbar("error", jsonData['error']);
         throw Exception('Failed to login user');
       }
     } catch(e){

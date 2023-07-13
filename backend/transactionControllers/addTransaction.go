@@ -2,7 +2,6 @@ package transactionControllers
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"time"
 
@@ -15,12 +14,8 @@ func AddTransaction() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 		defer cancel()
-		// println(c.)
 		userId, exists := c.Get("uid")
 		if !exists {
-			println(c)
-			println(exists)
-			println("Here")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "User id not found"})
 			return
 
@@ -29,7 +24,6 @@ func AddTransaction() gin.HandlerFunc {
 		var transaction models.Transaction
 
 		if err := c.BindJSON(&transaction); err != nil {
-			log.Fatal("error in binding", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -37,7 +31,6 @@ func AddTransaction() gin.HandlerFunc {
 		validationErr := validate.Struct(transaction)
 
 		if validationErr != nil {
-			log.Fatal("Validation Error", validationErr)
 			c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
 			return
 		}
@@ -45,7 +38,6 @@ func AddTransaction() gin.HandlerFunc {
 		transaction.ID = primitive.NewObjectID()
 		transaction.Transaction_id = transaction.ID.Hex()
 
-		// transaction.Date = time.Now()
 		transaction.User_id = userId.(string)
 
 		_, insertErr := transactionCollection.InsertOne(ctx, transaction)
