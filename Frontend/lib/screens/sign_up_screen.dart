@@ -1,8 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:personal_expenses_app/controllers/auth_controller.dart';
 import 'package:personal_expenses_app/models/auth_model.dart';
 import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
+import 'package:personal_expenses_app/screens/loading_screen.dart';
 import 'package:personal_expenses_app/screens/log_in_screen.dart';
 import '../widgets/textfield_widget.dart';
 
@@ -29,18 +32,24 @@ class SignUpScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                RichText(
-                  text: TextSpan(
-                    text: 'Hello, \nWelcome To',
-                    style: Theme.of(context).textTheme.displayLarge,
-                    children: const <TextSpan>[
-                      TextSpan(
-                          text: '\nPersonal Expenses',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green)),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text: 'Manage and \nVisualize\nYour',
+                        style: Theme.of(context).textTheme.displayLarge,
+                        children: const <TextSpan>[
+                          TextSpan(
+                              text: ' Expenses',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green)),
+                        ],
+                      ),
+                    ),
+
+                    // Image.asset("asset/images/leave.png"),
+                  ],
                 ),
                 Column(
                   children: [
@@ -111,12 +120,12 @@ class SignUpScreen extends StatelessWidget {
                               await _authController.signUp(user);
 
                               Get.offAll(
-                                () => const AllTransactionsScreen(),
+                                () => const LoadingScreen(),
                                 transition: Transition.fade,
                                 duration: const Duration(seconds: 1),
                               );
                             } catch (e) {
-                              Get.snackbar("error", "Failed to signup");
+                              log.printError();
                             }
                           },
                           child: Center(
@@ -140,7 +149,10 @@ class SignUpScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.to(LogInScreen());
+                          Get.to(LogInScreen(),
+                            transition: Transition.fade,
+                            duration: const Duration(seconds: 1),
+                          );
                         },
                         child: const Text(
                           'Log In',

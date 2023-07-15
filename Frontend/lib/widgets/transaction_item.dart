@@ -45,7 +45,7 @@ class TransactionItem extends StatelessWidget {
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            '\$${transactionItem.amount.toString()}',
+                            '\u{20B9}${transactionItem.amount.toString()}',
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
                         )),

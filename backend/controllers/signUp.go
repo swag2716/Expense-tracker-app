@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -58,7 +57,6 @@ func Signup() gin.HandlerFunc {
 		}
 
 		if count > 0 {
-			fmt.Println("phone exist error")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Phone number already exist"})
 			return
 		}

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:personal_expenses_app/controllers/auth_controller.dart';
 import 'package:personal_expenses_app/models/auth_model.dart';
+import 'package:personal_expenses_app/screens/loading_screen.dart';
 import 'package:personal_expenses_app/screens/sign_up_screen.dart';
 
 import '../widgets/textfield_widget.dart';
@@ -90,7 +91,7 @@ class LogInScreen extends StatelessWidget {
                               await _authController.logIn(user);
 
                               Get.offAll(
-                                () => const AllTransactionsScreen(),
+                                () => const LoadingScreen(),
                                 transition: Transition.fade,
                                 duration: const Duration(seconds: 1),
                               );
@@ -121,7 +122,10 @@ class LogInScreen extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.offAll(SignUpScreen());
+                          Get.offAll(SignUpScreen(),
+                            transition: Transition.fade,
+                            duration: const Duration(seconds: 1),
+                          );
                         },
                         child: const Text(
                           'Sign Up',

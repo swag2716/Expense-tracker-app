@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:personal_expenses_app/controllers/transaction_controller.dart';
 import 'package:personal_expenses_app/widgets/transaction_item.dart';
 import '../models/transaction.dart';

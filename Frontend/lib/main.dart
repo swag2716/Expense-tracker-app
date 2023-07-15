@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:personal_expenses_app/controllers/auth_controller.dart';
-import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
 import 'package:personal_expenses_app/screens/loading_screen.dart';
 import 'package:personal_expenses_app/utils/theme_widget.dart';
-
 import 'controllers/transaction_controller.dart';
 
 

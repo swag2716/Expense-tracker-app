@@ -66,6 +66,9 @@ flutter:
   assets:
     - asset/images/waiting.png
     - asset/images/welcome.png
+    - asset/images/person.png
+    - asset/images/home.jpg
+    - asset/images/leave.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

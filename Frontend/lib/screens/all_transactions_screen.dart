@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:personal_expenses_app/components/main_drawer.dart';
-import 'package:personal_expenses_app/controllers/auth_controller.dart';
 import 'package:personal_expenses_app/controllers/transaction_controller.dart';
+import 'package:personal_expenses_app/screens/home_screen.dart';
+import 'package:personal_expenses_app/screens/loading_screen.dart';
 import 'package:personal_expenses_app/screens/sign_up_screen.dart';
 import '../models/transaction.dart';
 import '../widgets/chart.dart';
@@ -19,6 +20,13 @@ class AllTransactionsScreen extends StatefulWidget {
 
 class _AllTransactionsScreen extends State<AllTransactionsScreen> {
   final TransactionController _transactionController = Get.find<TransactionController>();
+
+  // @override
+
+  // void initState(){
+  //   super.initState();
+  //   _transactionController.getTransactions();
+  // }
  
   var _showChart = false;
  
@@ -108,8 +116,10 @@ class _AllTransactionsScreen extends State<AllTransactionsScreen> {
           padding: const EdgeInsets.all(16.0),
           child: IconButton(
               onPressed: () {
-                // Get.back();
-                Get.to(SignUpScreen());
+                Get.to(const HomeScreen(),
+                  transition: Transition.fade,
+                  duration: const Duration(seconds: 1),
+                );
               },
               icon: const Icon(Icons.home)),
         )

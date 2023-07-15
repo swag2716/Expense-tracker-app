@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
-
-import '../controllers/auth_controller.dart';
 import '../controllers/transaction_controller.dart';
 import '../models/transaction.dart';
 
@@ -39,11 +36,9 @@ class _NewTransactionState extends State<NewTransaction> {
     );
 
     try {
-      await _transactionController.addTransaction(newTransaction);
       Get.back();
-      // Get.to(() => const AllTransactionsScreen());
+      await _transactionController.addTransaction(newTransaction);
     } catch (e) {
-      print(e);
       Get.snackbar("error", "Failed to add transaction");
     }
 

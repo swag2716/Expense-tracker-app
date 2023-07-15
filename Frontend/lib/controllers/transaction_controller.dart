@@ -5,6 +5,7 @@ import 'package:personal_expenses_app/models/transaction.dart';
 import 'package:personal_expenses_app/screens/all_transactions_screen.dart';
 import 'package:personal_expenses_app/screens/log_in_screen.dart';
 import 'package:personal_expenses_app/screens/sign_up_screen.dart';
+import '../screens/home_screen.dart';
 import '../storage/auth_storage.dart';
 
 
@@ -33,7 +34,7 @@ class TransactionController extends GetxController {
     if(jsonData != null){
       transactions.assignAll(jsonData.map((data) => Transaction.fromJSON(data)).toList());
     }
-    Get.to(const AllTransactionsScreen());
+    Get.offAll(const AllTransactionsScreen());
   }
 
   else if(response.statusCode == 401){
@@ -41,7 +42,7 @@ class TransactionController extends GetxController {
     
   } 
   else if(response.statusCode == 400){  
-    Get.offAll(SignUpScreen());
+    Get.offAll(const HomeScreen());
   }
   else{
      final jsonData = jsonDecode(response.body);

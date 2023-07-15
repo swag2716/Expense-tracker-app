@@ -28,8 +28,8 @@ class MainDrawer extends StatelessWidget {
                     children: [
                       const CircleAvatar(
                         radius: 50.0,
-                        backgroundImage: NetworkImage(
-                          "https://images.unsplash.com/photo-1594616838951-c155f8d978a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80",
+                        backgroundImage: AssetImage(
+                          "asset/images/person.png"
                         ),
                       ),
                       const SizedBox(
@@ -95,7 +95,7 @@ class MainDrawer extends StatelessWidget {
                   Get.offAll(LogInScreen());
                 },
                 leading: const Icon(
-                  Icons.logout,
+                  Icons.arrow_back_ios_new_outlined,
                   color: Colors.black,
                 ),
                 title: const Text("Log out"),
