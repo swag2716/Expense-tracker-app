@@ -13,7 +13,7 @@ func main() {
 	err := godotenv.Load(".env")
 
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Unable to load environment variables")
 	}
 
 	port := os.Getenv("PORT")
@@ -29,5 +29,5 @@ func main() {
 	routes.TransactionRoutes(router)
 	routes.UserRoutes(router)
 
-	log.Fatal(router.Run(":" + port))
+	router.Run(":" + port)
 }

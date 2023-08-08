@@ -45,7 +45,7 @@ class TransactionController extends GetxController {
     Get.offAll(const HomeScreen());
   }
   else{
-     final jsonData = jsonDecode(response.body);
+    final jsonData = jsonDecode(response.body);
     Get.snackbar("error", jsonData['error']);
     throw Exception("Failed to check validity");
   }
